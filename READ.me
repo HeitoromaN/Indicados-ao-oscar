@@ -4,31 +4,44 @@ Resposta: 1
 
 Amy Adams já ganhou algum Oscar?
 
+Q: select * from indicados_ao_oscar where nome_do_indicado = "Amy Adams";
+ou select count(*) from indicados_ao_oscar where nome_do_indicado = "Amy Adams" and vencedor = "true";
+
 Resposta: Não
 
 A série de filmes Toy Story ganhou um Oscar em quais anos?
 
 Resposta: 2011 (Duas vezes) e 2020 (Uma vez)
 
+Q: SELECT * FROM indicados_ao_oscar WHERE nome_do_filme LIKE = "%Toy Story%" AND vencedor = "True";
+
 A partir de que ano que a categoria "Actress" deixa de existir?
 
 Resposta: A partir de 1976 a categoria já não existia.
+Q: SELECT MAX(ano_cerimonia) FROM indicados_ao_oscar WHERE categoria LIKE "%Actress%";
 
 Quem ganhou o primeiro Oscar para Melhor Atriz? Em que ano?
 
 Resposta: Janet Gaynor em 1928
+Q: select * from indicados_ao_oscar where categoria like "%actress%" and categoria "true";
 
 Na campo "Vencedor", altere todos os valores com "true" para 1 e todos os valores "false" para 0.
 
 Resposta: Feito
+update indicados_ao_oscar where vencedor = true change to 1;
 
 Em qual edição do Oscar "Crash" concorreu ao Oscar?
+Q: SELECT ano_cerimonia FROM indicados_ao_oscar WHERE nome_do_filme = "Crash";
 
 Resposta: Na edição de 2006
+
+Q: UPDATE indicados_ao_oscar SET vencedor = 1 WHERE vencedor = "true";
+UPDATE indicados_ao_oscar SET vencedor = 0 WHERE vencedor = "false";
 
 O filme Central do Brasil aparece no Oscar?
 
 Resposta: Não
+select * from indicados_ao_oscar where nome_do_filme like "%Central do Brasil%";
 
 Inclua no banco 3 filmes que nunca foram nem nomeados ao Oscar, mas que merecem ser.
 
@@ -43,6 +56,7 @@ INSERT INTO indicados_ao_oscar(ano_filmagem,ano_cerimonia,cerimonia,categoria,no
 Denzel Washington já ganhou algum Oscar?
 
 Resposta: Sim, com 'Training Day' em 2002 e 'Glory' em 1990
+Q: select * from indicados_ao_oscar where nome_do_indicado = "Denzel Washington"
 
 Quais os filmes que ganharam o Oscar de Melhor Filme?
 
@@ -65,9 +79,18 @@ Ben-Hur
 The Apartment
 West Side Story
 
+Q: select * from indicados_ao_oscar where categoria like %"Best motion picture%" and vencedor = "1"
+
 Bonus: Quais os filmes que ganharam o Oscar de Melhor Filme e Melhor Diretor na mesma cerimonia?
 
-Resposta: Nenhum
+Resposta: Schindler’s List (1994), The Godfather Part II (1975)
+
+Q: SELECT ano_cerimonia, nome_do_filme 
+FROM indicados_ao_oscar 
+WHERE (categoria = "Best Motion Picture" OR categoria = "Best Director") 
+  AND vencedor = 1 
+GROUP BY ano_cerimonia, nome_do_filme 
+HAVING COUNT(DISTINCT categoria) = 2;
 
 Bonus: Denzel Washington e Jamie Foxx já concorreram ao Oscar no mesmo ano?
 
@@ -81,3 +104,9 @@ Bonus: Denzel Washington e Jamie Foxx já concorreram ao Oscar no mesmo ano?
 2017
 2018
 2022
+
+SELECT DISTINCT ano_cerimonia 
+FROM indicados_ao_oscar 
+WHERE nome_do_indicado IN ("Denzel Washington", "Jamie Foxx")
+GROUP BY ano_cerimonia
+HAVING COUNT(DISTINCT nome_do_indicado) = 2;
